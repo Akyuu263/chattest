@@ -5,7 +5,9 @@ use std::sync::mpsc;
 use std::thread;
 
 const LOCAL: &str = "0.0.0.0:6000";
-const MSG_SIZE: usize = 32;
+const MAX_MSG_SIZE: usize = 1024;
+const MSG_TYPE_CHAT: u8 = 1;
+const LENGTH_SIZE:u32 = 4;
 
 fn sleep() {
     thread::sleep(::std::time::Duration::from_millis(100));
@@ -26,7 +28,7 @@ fn main() {
             thread::spawn(move || {
                 let mut buff = vec![];
                 loop {
-                    let mut temp = [0; MSG_SIZE * 2];
+                    let mut temp = [0; MAX_MSG_SIZE + 1 + LENGTH_SIZE as usize];
                     match socket.read(&mut temp) {
                         Ok(0) => {
                             println!("closing connection with: {}", addr);
@@ -42,21 +44,31 @@ fn main() {
                         }
                     }
 
-                    while buff.len() >= MSG_SIZE {
-                        let msg = buff.drain(..MSG_SIZE).take_while(|&x| x !=0 ).collect::<Vec<_>>();
-                        let msg = String::from_utf8_lossy(&msg).into_owned();
-                        println!("{}: {:?}", addr, msg);
-                        tx.send(msg).expect("failed to send msg to rx");
+                    while buff.len() > LENGTH_SIZE as usize {
+                        let length = u32::from_le_bytes(buff[..4].try_into().unwrap());
+                        if length as usize > MAX_MSG_SIZE || buff.len() < (LENGTH_SIZE + length) as usize {
+                            break;
+                        }
+                        buff.drain(..4);
+                        let mut msg = buff.drain(..length as usize).collect::<Vec<_>>();
+                        let msg_type = msg.remove(0);
+                        if msg_type == MSG_TYPE_CHAT {
+                            let msg = String::from_utf8_lossy(&msg).into_owned();
+                            println!("{}: {:?}", addr, msg);
+                            tx.send(msg).expect("failed to send msg to rx");
+                        }
                     }
-                
+
                     sleep();
                 }
             });
         }
 
         if let Ok(msg) = rx.try_recv() {
-            let mut buff = msg.clone().into_bytes();
-            buff.resize(MSG_SIZE,0);
+            let len = 1 + msg.len() as u32;
+            let mut buff = len.to_le_bytes().to_vec();
+            buff.push(MSG_TYPE_CHAT);
+            buff.extend_from_slice(msg.as_bytes());
             clients.iter_mut().for_each(|client| client.1.push_back(buff.clone()));
         }
 

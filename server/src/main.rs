@@ -1,6 +1,6 @@
 use std::io::{ErrorKind, Read, Write};
 use std::collections::VecDeque;
-use std::net::{TcpListener, TcpStream};
+use std::net::{TcpListener, TcpStream, SocketAddr};
 use std::sync::mpsc;
 use std::thread;
 
@@ -8,6 +8,12 @@ const LOCAL: &str = "0.0.0.0:6000";
 const MAX_MSG_SIZE: usize = 1024;
 const MSG_TYPE_CHAT: u8 = 1;
 const LENGTH_SIZE:u32 = 4;
+
+struct Upstream {
+    addr: SocketAddr,
+    msg_type: u8,
+    msg: String,
+}
 
 fn sleep() {
     thread::sleep(::std::time::Duration::from_millis(100));
@@ -18,7 +24,7 @@ fn main() {
     server.set_nonblocking(true).expect("failed to initialize non-blocking");
 
     let mut clients: Vec<(TcpStream, VecDeque<Vec<u8>>)> = vec![];
-    let (tx, rx) = mpsc::channel::<String>();
+    let (tx, rx) = mpsc::channel::<Upstream>();
     loop {
         if let Ok((mut socket, addr)) = server.accept() {
             println!("Client {} connected", addr);
@@ -52,11 +58,14 @@ fn main() {
                         buff.drain(..4);
                         let mut msg = buff.drain(..length as usize).collect::<Vec<_>>();
                         let msg_type = msg.remove(0);
-                        if msg_type == MSG_TYPE_CHAT {
-                            let msg = String::from_utf8_lossy(&msg).into_owned();
-                            println!("{}: {:?}", addr, msg);
-                            tx.send(msg).expect("failed to send msg to rx");
-                        }
+                        let msg = String::from_utf8_lossy(&msg).into_owned();
+                        println!("{}: {:?}", addr, msg);
+                        let upstream = Upstream {
+                            addr,
+                            msg_type,
+                            msg,
+                        };
+                        tx.send(upstream).expect("failed to send msg to rx");
                     }
 
                     sleep();
@@ -64,12 +73,20 @@ fn main() {
             });
         }
 
-        if let Ok(msg) = rx.try_recv() {
+        if let Ok(upstream) = rx.try_recv() {
+            let msg = &upstream.msg;
             let len = 1 + msg.len() as u32;
             let mut buff = len.to_le_bytes().to_vec();
-            buff.push(MSG_TYPE_CHAT);
-            buff.extend_from_slice(msg.as_bytes());
-            clients.iter_mut().for_each(|client| client.1.push_back(buff.clone()));
+            match upstream.msg_type {
+                MSG_TYPE_CHAT => {
+                    buff.push(MSG_TYPE_CHAT);
+                    buff.extend_from_slice(msg.as_bytes());
+                    clients.iter_mut().for_each(|client| client.1.push_back(buff.clone()));
+                }
+                _ => {
+                    println!("ignore");
+                }
+            }
         }
 
         clients.retain_mut(|client| {

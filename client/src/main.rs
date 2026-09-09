@@ -75,6 +75,10 @@ fn main() {
         let mut buff = String::new();
         io::stdin().read_line(&mut buff).expect("reading from stdin failed");
         let msg = buff.trim().to_string();
+        if msg.len() + 1 > MAX_MSG_SIZE {
+            println!("sending message failed, context too long");
+            continue;
+        }
         if msg == ":quit" || tx.send(msg).is_err() {break}
     }
     println!("bye bye");

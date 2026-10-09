@@ -6,6 +6,7 @@ use std::time::Duration;
 use std::env::args;
 
 const MAX_MSG_SIZE: usize = 1024;
+const MAX_NAME_SIZE: usize = 32;
 const MSG_TYPE_CHAT: u8 = 1;
 const MSG_TYPE_JOIN: u8 = 2;
 const LENGTH_SIZE: u32 = 4;
@@ -58,13 +59,15 @@ fn main() {
             }
 
             match rx.try_recv() {
-                Ok(msg) => {
-                    let len = 1 + msg.len() as u32;
+                Ok(out_going) => {
+                    let len = 1 + out_going.msg.len() as u32;
                     let mut buff = len.to_le_bytes().to_vec();
-                    buff.push(MSG_TYPE_CHAT);
-                    buff.extend_from_slice(msg.as_bytes());
+                    buff.push(out_going.msg_type);
+                    buff.extend_from_slice(out_going.msg.as_bytes());
                     if let Ok(()) = client.write_all(&buff) {
-                        println!("message sent {:?}", msg);
+                        if out_going.msg_type == MSG_TYPE_CHAT {
+                            println!("message sent {:?}", out_going.msg);
+                        }
                     } else {
                         println!("writing to socket failed");
                     }
@@ -86,13 +89,19 @@ fn main() {
             "" => {
                 println!("name can not be empty");
             }
-            _ => {
-                let out_going = Outgoing {
-                    msg_type: MSG_TYPE_JOIN, 
-                    msg: input.to_string()};
-                tx.send(out_going);
-                break;
-            }
+                _ => {
+                    let out_going = Outgoing {
+                        msg_type: MSG_TYPE_JOIN, 
+                        msg: input.to_string()};
+
+                    if out_going.msg.len() > MAX_NAME_SIZE {
+                        println!("name too long");
+                        continue;
+                    }
+
+                    tx.send(out_going).expect("failed to send msg to rx");
+                    break;
+                }
         }
     }
 
@@ -105,7 +114,11 @@ fn main() {
             println!("sending message failed, context too long");
             continue;
         }
-        if msg == ":quit" || tx.send(msg).is_err() {break}
+        let out_going = Outgoing {
+            msg_type: MSG_TYPE_CHAT,
+            msg,
+        };
+        if out_going.msg == ":quit" || tx.send(out_going).is_err() {break}
     }
     println!("bye bye");
 }

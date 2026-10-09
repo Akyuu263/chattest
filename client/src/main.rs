@@ -7,7 +7,14 @@ use std::env::args;
 
 const MAX_MSG_SIZE: usize = 1024;
 const MSG_TYPE_CHAT: u8 = 1;
-const LENGTH_SIZE:u32 = 4;
+const MSG_TYPE_JOIN: u8 = 2;
+const LENGTH_SIZE: u32 = 4;
+
+
+struct Outgoing {
+    msg_type: u8,
+    msg: String,
+}
 
 fn main() {
     let ip = args().nth(1).unwrap_or_else(|| "127.0.0.1".to_string());
@@ -15,7 +22,7 @@ fn main() {
     let mut client = TcpStream::connect(addr).expect("Stream failed to connect");
     client.set_nonblocking(true).expect("failed to initiate non-blocking");
 
-    let (tx, rx) = mpsc::channel::<String>();
+    let (tx, rx) = mpsc::channel::<Outgoing>();
 
     thread::spawn(move || { 
         let mut buff = vec![];
@@ -69,6 +76,25 @@ fn main() {
             thread::sleep(Duration::from_millis(100));
         }
     });
+
+    loop {
+        println!("Please Write Your Name:");
+        let mut input = String::new();
+        io::stdin().read_line(&mut input).expect("reading from stdin failed");
+        let input = input.trim();
+        match input {
+            "" => {
+                println!("name can not be empty");
+            }
+            _ => {
+                let out_going = Outgoing {
+                    msg_type: MSG_TYPE_JOIN, 
+                    msg: input.to_string()};
+                tx.send(out_going);
+                break;
+            }
+        }
+    }
 
     println!("Write a Message:");
     loop {

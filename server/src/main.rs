@@ -7,12 +7,20 @@ use std::thread;
 const LOCAL: &str = "0.0.0.0:6000";
 const MAX_MSG_SIZE: usize = 1024;
 const MSG_TYPE_CHAT: u8 = 1;
+const MSG_TYPE_JOIN: u8 = 2;
 const LENGTH_SIZE:u32 = 4;
 
 struct Upstream {
     addr: SocketAddr,
     msg_type: u8,
     msg: String,
+}
+
+struct Client {
+    addr: SocketAddr,
+    name: String,
+    stream: TcpStream,
+    msg_queue: VecDeque<Vec<u8>>,
 }
 
 fn sleep() {
@@ -82,6 +90,9 @@ fn main() {
                     buff.push(MSG_TYPE_CHAT);
                     buff.extend_from_slice(msg.as_bytes());
                     clients.iter_mut().for_each(|client| client.1.push_back(buff.clone()));
+                }
+                MSG_TYPE_JOIN => {
+
                 }
                 _ => {
                     println!("ignore");

@@ -94,24 +94,39 @@ fn main() {
 
         if let Ok(mut upstream) = rx.try_recv() {
             let msg = &mut upstream.msg;
-            let len = 1 + msg.len() as u32;
-            let mut buff = len.to_le_bytes().to_vec();
-            match upstream.msg_type {
+            let content = match upstream.msg_type {
                 MSG_TYPE_CHAT => {
-                    buff.push(MSG_TYPE_CHAT);
-                    buff.extend_from_slice(msg.as_bytes());
-                    clients.iter_mut().for_each(|client| client.msg_queue.push_back(buff.clone()));
+                    let mut name = "Unknown";
+                    if let Some(client) = clients.iter().find(|client| client.addr == upstream.addr) {
+                        name = &client.name;
+                        if name.is_empty() {
+                            name = "Unknown";
+                        }
+                    }
+                    let msg = format!("{}: {}", name, msg);
+                    Some(msg)
                 }
                 MSG_TYPE_JOIN => {
-                    let msg = msg.chars().take(MAX_NAME_LONG).collect::<String>();
-                    if let Some(client)  =clients.iter_mut().find(|client| client.addr == upstream.addr) {
+                    let mut msg = msg.chars().take(MAX_NAME_LONG).collect::<String>();
+                    if let Some(client) = clients.iter_mut().find(|client| client.addr == upstream.addr) {
                         client.name = msg;
                         println!("{} name = {:?}", client.addr, client.name);
+                        msg = format!("{} joined", client.name);
                     }
+                    Some(msg)
                 }
                 _ => {
                     println!("ignore");
+                    None
                 }
+            };
+
+            if let Some(content) = content {
+                let len = 1 + content.len() as u32;
+                let mut buff = len.to_le_bytes().to_vec();
+                buff.push(upstream.msg_type);
+                buff.extend_from_slice(content.as_bytes());
+                clients.iter_mut().for_each(|client| client.msg_queue.push_back(buff.clone()));
             }
         }
 

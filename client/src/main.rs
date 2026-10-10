@@ -53,8 +53,8 @@ fn main() {
                 let mut msg = buff.drain(..length as usize).collect::<Vec<_>>();
                 let msg_type = msg.remove(0);
                 let msg = String::from_utf8_lossy(&msg).into_owned();
-                if msg_type == MSG_TYPE_CHAT {
-                    println!("message recv {:?}", msg);
+                if msg_type == MSG_TYPE_CHAT || msg_type == MSG_TYPE_JOIN {
+                    println!("{}", msg);
                 }
             }
 

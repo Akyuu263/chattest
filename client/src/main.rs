@@ -6,7 +6,7 @@ use std::time::Duration;
 use std::env::args;
 
 const MAX_MSG_SIZE: usize = 1024;
-const MAX_NAME_SIZE: usize = 32;
+const MAX_NAME_LONG: usize = 16;
 const MSG_TYPE_CHAT: u8 = 1;
 const MSG_TYPE_JOIN: u8 = 2;
 const LENGTH_SIZE: u32 = 4;
@@ -52,8 +52,8 @@ fn main() {
                 buff.drain(..4);
                 let mut msg = buff.drain(..length as usize).collect::<Vec<_>>();
                 let msg_type = msg.remove(0);
+                let msg = String::from_utf8_lossy(&msg).into_owned();
                 if msg_type == MSG_TYPE_CHAT {
-                    let msg = String::from_utf8_lossy(&msg).into_owned();
                     println!("message recv {:?}", msg);
                 }
             }
@@ -94,7 +94,7 @@ fn main() {
                         msg_type: MSG_TYPE_JOIN, 
                         msg: input.to_string()};
 
-                    if out_going.msg.len() > MAX_NAME_SIZE {
+                    if out_going.msg.chars().count() > MAX_NAME_LONG {
                         println!("name too long");
                         continue;
                     }

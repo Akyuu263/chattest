@@ -1,0 +1,102 @@
+0 verbose cli /usr/bin/node /usr/lib/node_modules/npm/bin/npm-cli.js
+1 info using npm@12.2.1
+2 info using node@v26.12.0
+3 silly config load:file:/usr/lib/node_modules/npm/npmrc
+4 silly config load:file:/home/KevinLi/.npmrc
+5 silly config load:file:/etc/npmrc
+6 verbose title npm exec create-tauri-app@latest chat-gui --manager npm --template vanilla --identifier com.kvin.chat -y
+7 verbose argv "exec" "--yes" "--" "create-tauri-app@latest" "chat-gui" "--manager" "npm" "--template" "vanilla" "--identifier" "com.kvin.chat" "-y"
+8 verbose logfile logs-max:10 dir:/home/KevinLi/chat/.npm-logs/2026-10-20T15_51_00_214Z-
+9 verbose logfile /home/KevinLi/chat/.npm-logs/2026-10-20T15_51_00_214Z-debug-0.log
+10 silly logfile done cleaning log files
+11 silly packumentCache heap:4395630592 maxSize:1098907648 maxEntrySize:549453824
+12 http fetch GET 200 https://registry.npmjs.org/create-tauri-app 674ms (cache miss)
+13 silly packumentCache heap:4395630592 maxSize:1098907648 maxEntrySize:549453824
+14 http fetch GET 200 https://registry.npmjs.org/npm 783ms
+15 silly packumentCache heap:4395630592 maxSize:1098907648 maxEntrySize:549453824
+16 silly idealTree buildDeps
+17 silly fetch manifest create-tauri-app@4.7.5
+18 silly packumentCache full:https://registry.npmjs.org/create-tauri-app cache-miss
+19 http fetch GET 200 https://registry.npmjs.org/create-tauri-app 305ms (cache miss)
+20 silly packumentCache full:https://registry.npmjs.org/create-tauri-app set size:undefined disposed:false
+21 silly placeDep ROOT create-tauri-app@4.7.5 OK for:  want: 4.7.5
+22 silly fetch manifest create-tauri-app-darwin-x64@4.7.5
+23 silly packumentCache full:https://registry.npmjs.org/create-tauri-app-darwin-x64 cache-miss
+24 silly fetch manifest create-tauri-app-darwin-arm64@4.7.5
+25 silly packumentCache full:https://registry.npmjs.org/create-tauri-app-darwin-arm64 cache-miss
+26 silly fetch manifest create-tauri-app-linux-x64-gnu@4.7.5
+27 silly packumentCache full:https://registry.npmjs.org/create-tauri-app-linux-x64-gnu cache-miss
+28 silly fetch manifest create-tauri-app-linux-x64-musl@4.7.5
+29 silly packumentCache full:https://registry.npmjs.org/create-tauri-app-linux-x64-musl cache-miss
+30 silly fetch manifest create-tauri-app-win32-x64-msvc@4.7.5
+31 silly packumentCache full:https://registry.npmjs.org/create-tauri-app-win32-x64-msvc cache-miss
+32 silly fetch manifest create-tauri-app-linux-arm64-gnu@4.7.5
+33 silly packumentCache full:https://registry.npmjs.org/create-tauri-app-linux-arm64-gnu cache-miss
+34 silly fetch manifest create-tauri-app-win32-ia32-msvc@4.7.5
+35 silly packumentCache full:https://registry.npmjs.org/create-tauri-app-win32-ia32-msvc cache-miss
+36 silly fetch manifest create-tauri-app-linux-arm64-musl@4.7.5
+37 silly packumentCache full:https://registry.npmjs.org/create-tauri-app-linux-arm64-musl cache-miss
+38 silly fetch manifest create-tauri-app-win32-arm64-msvc@4.7.5
+39 silly packumentCache full:https://registry.npmjs.org/create-tauri-app-win32-arm64-msvc cache-miss
+40 silly fetch manifest create-tauri-app-linux-arm-gnueabihf@4.7.5
+41 silly packumentCache full:https://registry.npmjs.org/create-tauri-app-linux-arm-gnueabihf cache-miss
+42 http fetch GET 200 https://registry.npmjs.org/create-tauri-app-darwin-x64 127ms (cache miss)
+43 silly packumentCache full:https://registry.npmjs.org/create-tauri-app-darwin-x64 set size:undefined disposed:false
+44 http fetch GET 200 https://registry.npmjs.org/create-tauri-app-darwin-arm64 202ms (cache miss)
+45 silly packumentCache full:https://registry.npmjs.org/create-tauri-app-darwin-arm64 set size:undefined disposed:false
+46 http fetch GET 200 https://registry.npmjs.org/create-tauri-app-linux-x64-gnu 585ms (cache miss)
+47 silly packumentCache full:https://registry.npmjs.org/create-tauri-app-linux-x64-gnu set size:undefined disposed:false
+48 http fetch GET 200 https://registry.npmjs.org/create-tauri-app-linux-x64-musl 669ms (cache miss)
+49 silly packumentCache full:https://registry.npmjs.org/create-tauri-app-linux-x64-musl set size:undefined disposed:false
+50 http fetch GET 200 https://registry.npmjs.org/create-tauri-app-linux-arm-gnueabihf 699ms (cache miss)
+51 silly packumentCache full:https://registry.npmjs.org/create-tauri-app-linux-arm-gnueabihf set size:undefined disposed:false
+52 http fetch GET 200 https://registry.npmjs.org/create-tauri-app-win32-arm64-msvc 833ms (cache miss)
+53 silly packumentCache full:https://registry.npmjs.org/create-tauri-app-win32-arm64-msvc set size:undefined disposed:false
+54 http fetch GET 200 https://registry.npmjs.org/create-tauri-app-win32-x64-msvc 865ms (cache miss)
+55 silly packumentCache full:https://registry.npmjs.org/create-tauri-app-win32-x64-msvc set size:undefined disposed:false
+56 http fetch GET 200 https://registry.npmjs.org/create-tauri-app-win32-ia32-msvc 1020ms (cache miss)
+57 silly packumentCache full:https://registry.npmjs.org/create-tauri-app-win32-ia32-msvc set size:undefined disposed:false
+58 http fetch GET 200 https://registry.npmjs.org/create-tauri-app-linux-arm64-musl 1076ms (cache miss)
+59 silly packumentCache full:https://registry.npmjs.org/create-tauri-app-linux-arm64-musl set size:undefined disposed:false
+60 http fetch GET 200 https://registry.npmjs.org/create-tauri-app-linux-arm64-gnu 2199ms (cache miss)
+61 silly packumentCache full:https://registry.npmjs.org/create-tauri-app-linux-arm64-gnu set size:undefined disposed:false
+62 silly placeDep ROOT create-tauri-app-darwin-arm64@4.7.5 OK for: create-tauri-app@4.7.5 want: 4.7.5
+63 silly placeDep ROOT create-tauri-app-darwin-x64@4.7.5 OK for: create-tauri-app@4.7.5 want: 4.7.5
+64 silly placeDep ROOT create-tauri-app-linux-arm-gnueabihf@4.7.5 OK for: create-tauri-app@4.7.5 want: 4.7.5
+65 silly placeDep ROOT create-tauri-app-linux-arm64-gnu@4.7.5 OK for: create-tauri-app@4.7.5 want: 4.7.5
+66 silly placeDep ROOT create-tauri-app-linux-arm64-musl@4.7.5 OK for: create-tauri-app@4.7.5 want: 4.7.5
+67 silly placeDep ROOT create-tauri-app-linux-x64-gnu@4.7.5 OK for: create-tauri-app@4.7.5 want: 4.7.5
+68 silly placeDep ROOT create-tauri-app-linux-x64-musl@4.7.5 OK for: create-tauri-app@4.7.5 want: 4.7.5
+69 silly placeDep ROOT create-tauri-app-win32-arm64-msvc@4.7.5 OK for: create-tauri-app@4.7.5 want: 4.7.5
+70 silly placeDep ROOT create-tauri-app-win32-ia32-msvc@4.7.5 OK for: create-tauri-app@4.7.5 want: 4.7.5
+71 silly placeDep ROOT create-tauri-app-win32-x64-msvc@4.7.5 OK for: create-tauri-app@4.7.5 want: 4.7.5
+72 silly reify moves {}
+73 silly audit bulk request {
+73 silly audit   'create-tauri-app': [ '4.7.5' ],
+73 silly audit   'create-tauri-app-darwin-arm64': [ '4.7.5' ],
+73 silly audit   'create-tauri-app-darwin-x64': [ '4.7.5' ],
+73 silly audit   'create-tauri-app-linux-arm-gnueabihf': [ '4.7.5' ],
+73 silly audit   'create-tauri-app-linux-arm64-gnu': [ '4.7.5' ],
+73 silly audit   'create-tauri-app-linux-arm64-musl': [ '4.7.5' ],
+73 silly audit   'create-tauri-app-linux-x64-gnu': [ '4.7.5' ],
+73 silly audit   'create-tauri-app-linux-x64-musl': [ '4.7.5' ],
+73 silly audit   'create-tauri-app-win32-arm64-msvc': [ '4.7.5' ],
+73 silly audit   'create-tauri-app-win32-ia32-msvc': [ '4.7.5' ],
+73 silly audit   'create-tauri-app-win32-x64-msvc': [ '4.7.5' ]
+73 silly audit }
+74 http cache create-tauri-app-linux-x64-gnu@https://registry.npmjs.org/create-tauri-app-linux-x64-gnu/-/create-tauri-app-linux-x64-gnu-4.7.5.tgz 0ms (cache hit)
+75 http cache create-tauri-app@https://registry.npmjs.org/create-tauri-app/-/create-tauri-app-4.7.5.tgz 0ms (cache hit)
+76 silly tarball no local data for create-tauri-app-linux-x64-gnu@https://registry.npmjs.org/create-tauri-app-linux-x64-gnu/-/create-tauri-app-linux-x64-gnu-4.7.5.tgz. Extracting by manifest.
+77 silly tarball no local data for create-tauri-app@https://registry.npmjs.org/create-tauri-app/-/create-tauri-app-4.7.5.tgz. Extracting by manifest.
+78 http fetch POST 200 https://registry.npmjs.org/-/npm/v1/security/advisories/bulk 216ms
+79 silly audit report {}
+80 http fetch GET 200 https://registry.npmjs.org/create-tauri-app/-/create-tauri-app-4.7.5.tgz 271ms (cache miss)
+81 http fetch GET 200 https://registry.npmjs.org/create-tauri-app-linux-x64-gnu/-/create-tauri-app-linux-x64-gnu-4.7.5.tgz 540ms (cache miss)
+82 notice run npx
+83 notice run 'create-tauri-app' chat-gui --manager npm --template vanilla --identifier com.kvin.chat -y
+84 verbose cwd /home/KevinLi/chat
+85 verbose os Linux 7.2.10-zen1-1-zen
+86 verbose node v26.12.0
+87 verbose npm  v12.2.1
+88 verbose exit 0
+89 info ok

@@ -9,6 +9,7 @@ const MAX_MSG_SIZE: usize = 1024;
 const MAX_NAME_LONG: usize = 16;
 const MSG_TYPE_CHAT: u8 = 1;
 const MSG_TYPE_JOIN: u8 = 2;
+const MSG_TYPE_LEAVE: u8 = 3;
 const LENGTH_SIZE: u32 = 4;
 
 
@@ -53,7 +54,9 @@ fn main() {
                 let mut msg = buff.drain(..length as usize).collect::<Vec<_>>();
                 let msg_type = msg.remove(0);
                 let msg = String::from_utf8_lossy(&msg).into_owned();
-                if msg_type == MSG_TYPE_CHAT || msg_type == MSG_TYPE_JOIN {
+                if msg_type == MSG_TYPE_CHAT ||
+                   msg_type == MSG_TYPE_JOIN ||
+                   msg_type == MSG_TYPE_LEAVE {
                     println!("{}", msg);
                 }
             }

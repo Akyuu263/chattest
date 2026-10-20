@@ -9,6 +9,7 @@ const MAX_MSG_SIZE: usize = 1024;
 const MAX_NAME_LONG: usize = 16;
 const MSG_TYPE_CHAT: u8 = 1;
 const MSG_TYPE_JOIN: u8 = 2;
+const MSG_TYPE_LEAVE: u8 = 3;
 const LENGTH_SIZE:u32 = 4;
 
 struct Upstream {
@@ -55,6 +56,11 @@ fn main() {
                     match socket.read(&mut temp) {
                         Ok(0) => {
                             println!("closing connection with: {}", addr);
+                            tx.send(Upstream {
+                                addr,
+                                msg_type: MSG_TYPE_LEAVE,
+                                msg: String::new()
+                            }).expect("failed to send msg to rx");
                             break;
                         },
                         Ok(n) => {
@@ -63,6 +69,11 @@ fn main() {
                         Err(ref err) if err.kind() == ErrorKind::WouldBlock => (),
                         Err(_) => {
                             println!("connection error with: {}", addr);
+                            tx.send(Upstream {
+                                addr,
+                                msg_type: MSG_TYPE_LEAVE,
+                                msg: String::new()
+                            }).expect("failed to send msg to rx");
                             break;
                         }
                     }
@@ -114,6 +125,15 @@ fn main() {
                         msg = format!("{} joined", client.name);
                     }
                     Some(msg)
+                }
+                MSG_TYPE_LEAVE => {
+                    let mut msg: Option<String> = None;
+                    if let Some(client) = clients.iter().find(|client| client.addr == upstream.addr) &&
+                    !client.name.is_empty() {
+                        msg = Some(format!("{} left", client.name));
+                    }
+                    clients.retain(|client| client.addr != upstream.addr);
+                    msg
                 }
                 _ => {
                     println!("ignore");

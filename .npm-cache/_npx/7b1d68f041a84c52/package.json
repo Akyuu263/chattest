@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "create-tauri-app": "^4.7.5"
+  },
+  "_npx": {
+    "packages": [
+      "create-tauri-app@latest"
+    ]
+  }
+}
